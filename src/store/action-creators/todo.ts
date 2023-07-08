@@ -4,7 +4,7 @@ import axios from "axios"
 import { TodoAction, TodoActionTypes } from "../../types/todo"
 
 
-export const fetcTodos = (page = 1, limit = 10) => {
+export const fetchTodos = (page = 1, limit = 10) => {
     return async (dispatch:Dispatch<TodoAction>) => {
         try{
             dispatch({type: TodoActionTypes.FETCH_TODOS})
