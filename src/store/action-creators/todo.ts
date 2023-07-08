@@ -1,26 +1,30 @@
 import { Dispatch } from "redux"
-import { UserAction, UserActionTypes } from "../../types/user"
 import axios from "axios"
-import { TodoAction, TodoActionTypes } from "../../types/todo"
+import { TodoActionTypes } from "../reducers/todoReducer"
 
 
 export const fetchTodos = (page = 1, limit = 10) => {
     return async (dispatch:Dispatch<TodoAction>) => {
         try{
-            dispatch({type: TodoActionTypes.FETCH_TODOS})
+            dispatch(FetchTodoAC())
             const response = await axios.get('https://jsonplaceholder.typicode.com/todos', {
                 params:{_page: page, _limit:limit}
             })
-            dispatch({type:TodoActionTypes.FETCH_TODOS_SUCCESS, payload:response.data})
+            dispatch(FetchTodoSuccessAC(response.data))
         }catch(e){
-            dispatch({
-                type:TodoActionTypes.FETCH_TODOS_ERROR,
-                payload: 'Some error occured of list todo'
-            })
+            dispatch(FetchTodoErrorAC('Some error occured in todo'))
         }
     }
 }
 
-export function setTodoPage(page: number): TodoAction {
-    return {type: TodoActionTypes.SET_TODO_PAGE, payload:page}
-}
+export const setTodoPageAC = (page: number) => ({type: TodoActionTypes.SET_TODO_PAGE, payload:page} as const)
+const FetchTodoAC = () => ({type: TodoActionTypes.FETCH_TODOS}as const)
+const FetchTodoSuccessAC = (payload:any[]) => ({type:TodoActionTypes.FETCH_TODOS_SUCCESS, payload} as const)
+const FetchTodoErrorAC = (payload:string) => ({ type:TodoActionTypes.FETCH_TODOS_ERROR, payload} as const)
+
+type FetchTodoActionType = ReturnType<typeof FetchTodoAC>
+type FetchTodoSuccessType = ReturnType<typeof FetchTodoSuccessAC>
+type FetchUsersErrorType = ReturnType<typeof FetchTodoErrorAC>
+type SetTodoPageType = ReturnType<typeof setTodoPageAC>
+
+export type TodoAction = FetchTodoActionType | FetchTodoSuccessType | FetchUsersErrorType | SetTodoPageType;

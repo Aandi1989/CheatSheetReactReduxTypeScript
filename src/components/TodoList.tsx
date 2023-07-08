@@ -4,7 +4,7 @@ import { useActions } from '../hooks/useActions';
 
 const TodoList: React.FC = () => {
     const { page, error, limit, loading, todos } = useTypedSelector(state => state.todo)
-    const {fetchTodos, setTodoPage } =useActions()
+    const {fetchTodos,setTodoPageAC} =useActions()
     const pages = [1, 2, 3, 4, 5]
     
     useEffect(() => {
@@ -25,7 +25,7 @@ const TodoList: React.FC = () => {
             )}
             <div style={{display:'flex'}}>
             {pages.map(p => 
-                 <div onClick={() => setTodoPage(p)} style={{border: p === page ? '2px solid black' : '1px solid gray', padding:'10px'}}>
+                 <div onClick={() => setTodoPageAC(p)} style={{border: p === page ? '2px solid black' : '1px solid gray', padding:'10px'}}>
                     {p}
                  </div>   
             )}
